@@ -9,10 +9,12 @@ import SwiftUI
 
 struct HealthDataListView: View {
     
+    @State private var isShowingAddData = false
+
     var metric: HealthMetricContext
     
     var body: some View {
-        List(0..<28){ i in
+        List(0..<28) { i in
             HStack {
                 Text(Date(), format: .dateTime.month().day().year())
                 Spacer()
@@ -20,10 +22,16 @@ struct HealthDataListView: View {
             }
         }
         .navigationTitle(metric.title)
-        .sheet(item: <#T##Binding<Identifiable?>#>, content: <#T##(Identifiable) -> View#>)
+        .sheet(isPresented: $isShowingAddData) {
+            Text("Add data")
+        }
+        .toolbar {
+            Button ("Add date", systemImage: "plus") {
+                isShowingAddData = true
+            }
+        }
     }
 }
-
 #Preview {
     NavigationStack {
         HealthDataListView(metric: .steps)
