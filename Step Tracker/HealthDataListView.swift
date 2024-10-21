@@ -11,6 +11,9 @@ struct HealthDataListView: View {
     
     @State private var isShowingAddData = false
 
+    @State private var selectedDate: Date = .now
+    @State private var valueToAdd: String = ""
+    
     var metric: HealthMetricContext
     
     var body: some View {
@@ -23,7 +26,7 @@ struct HealthDataListView: View {
         }
         .navigationTitle(metric.title)
         .sheet(isPresented: $isShowingAddData) {
-            Text("Add data")
+            AddDataView
         }
         .toolbar {
             Button ("Add date", systemImage: "plus") {
@@ -31,7 +34,34 @@ struct HealthDataListView: View {
             }
         }
     }
+    
+    var AddDataView: some View {
+        NavigationStack {
+            Form {
+                DatePicker("Add Data", selection: $selectedDate, displayedComponents: .date)
+                TextField("Enter Value", text: $valueToAdd)
+            }
+            
+            .navigationTitle(metric.title)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Data") {
+                        // Add Data
+                        self.$isShowingAddData.wrappedValue.toggle()
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        self.$isShowingAddData.wrappedValue.toggle()
+                    }
+                }
+            }
+            
+        }
+        
+    }
 }
+
 #Preview {
     NavigationStack {
         HealthDataListView(metric: .steps)
