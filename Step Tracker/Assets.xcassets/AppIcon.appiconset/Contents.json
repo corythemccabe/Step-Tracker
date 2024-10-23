@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Step Counter Icon.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "Step Counter Icon (Dark).png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +25,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "Step Counter Icon (Tinted).png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

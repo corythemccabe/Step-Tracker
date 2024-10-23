@@ -10,7 +10,7 @@ import SwiftUI
 enum HealthMetricContext: CaseIterable, Identifiable {
     case steps, weight
     var id: Self { self }
-    
+
     var title: String {
         switch self {
         case .steps:
@@ -22,84 +22,85 @@ enum HealthMetricContext: CaseIterable, Identifiable {
 }
 
 struct DashboardView: View {
+    @Environment(\.colorScheme) var colorScheme
     
-    @State private var selectedState: HealthMetricContext = .steps
-    var isSteps: Bool { selectedState == .steps }
-    
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack (spacing: 15) {
-                    Picker("Selected State", selection: $selectedState) {
-                        ForEach(HealthMetricContext.allCases) { metric in
-                            Text(metric.title)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                
-                    // STEPS ↓
-                    
-                    VStack {
-                        NavigationLink(value: selectedState) {
-                            HStack {
-                                VStack (alignment: .leading) {
-                                    Label(isSteps ? "Steps" : "Weight", systemImage: isSteps ? "shoeprints.fill" : "scalemass.fill")
-                                    
-                                        .font(.title3.bold())
-                                        .foregroundStyle(isSteps ? .purple : .blue)
-                                
-                                    Text(isSteps ? "Avg. 10K steps" : "Avg. 155 lbs")
-                                        .font(.caption)
-                                }
-                            
-                                Spacer()
-                            
-                                Image(systemName: "arrow.right")
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-                        .padding(.bottom, 12)
+    @State private var selectedStat: HealthMetricContext = .steps
+    var isSteps: Bool { selectedStat == .steps }
 
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundStyle(.secondary)
-                            .frame(height: 150)
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-                
-                    // CALENDAR  ↓
-                    
-                    VStack (alignment: .leading) {
-                            VStack (alignment: .leading) {
-                                Label("Averages", systemImage: "calendar")
-                                    .font(.title3.bold())
-                                    .foregroundStyle(isSteps ? .purple : .blue)
-                            
-                                Text("Last 28 days")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+    var body: some View {
+        ZStack {
+            Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+            NavigationStack {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        Picker("Selected Stat", selection: $selectedStat) {
+                            ForEach(HealthMetricContext.allCases) { metric in
+                                Text(metric.title)
                             }
-                        .padding(.bottom, 12)
-                        
-                        RoundedRectangle(cornerRadius: 12)
+                        }
+                        .pickerStyle(.segmented)
+
+                        VStack {
+                            NavigationLink(value: selectedStat) {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Label("Steps", systemImage: "figure.walk")
+                                            .font(.title3.bold())
+                                            .foregroundStyle(.pink)
+
+                                        Text("Avg: 10K Steps")
+                                            .font(.caption)
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
+                                }
+                            }
                             .foregroundStyle(.secondary)
-                            .frame(height: 240)
+                            .padding(.bottom, 12)
+
+                            RoundedRectangle(cornerRadius: 12)
+                                .foregroundStyle(.secondary)
+                                .frame(height: 150)
+                        }
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+
+                        VStack(alignment: .leading) {
+                                VStack(alignment: .leading) {
+                                    Label("Averages", systemImage: "calendar")
+                                        .font(.title3.bold())
+                                        .foregroundStyle(.pink)
+                                    
+                                    Text("Last 28 Days")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            .padding(.bottom, 12)
+
+                            RoundedRectangle(cornerRadius: 12)
+                                .foregroundStyle(.secondary)
+                                .frame(height: 240)
+                        }
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                     }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                 }
+                .padding()
+                .navigationTitle("Activity")
+                .navigationDestination(for: HealthMetricContext.self) { metric in
+                    HealthDataListView(metric: metric)
             }
-            .padding()
-            .navigationTitle("Activity")
-            .navigationDestination(for: HealthMetricContext.self) { metric in
-                HealthDataListView(metric: metric)
+            
             }
         }
-        .tint(isSteps ? .purple : .blue)
+        .tint(isSteps ? .pink : .indigo)
     }
 }
 
 #Preview {
     DashboardView()
 }
-

@@ -8,69 +8,66 @@
 import SwiftUI
 
 struct HealthDataListView: View {
-    
-    @State private var isShowingAddData = false
 
-    @State private var selectedDate: Date = .now
+    @State private var isShowingAddData = false
+    @State private var addDataDate: Date = .now
     @State private var valueToAdd: String = ""
-    
+
     var metric: HealthMetricContext
-    
+
     var body: some View {
         List(0..<28) { i in
             HStack {
                 Text(Date(), format: .dateTime.month().day().year())
                 Spacer()
-                Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
+                Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
             }
         }
         .navigationTitle(metric.title)
         .sheet(isPresented: $isShowingAddData) {
-            AddDataView
+            addDataView
         }
         .toolbar {
-            Button ("Add date", systemImage: "plus") {
+            Button("Add Data", systemImage: "plus") {
                 isShowingAddData = true
             }
         }
     }
-    
-    var AddDataView: some View {
+
+    var addDataView: some View {
         NavigationStack {
             Form {
-                DatePicker("Add Data", selection: $selectedDate, displayedComponents: .date)
-                TextField("Enter Value", text: $valueToAdd)
+                DatePicker("Date", selection: $addDataDate, displayedComponents: .date)
+                HStack {
+                    Text(metric.title)
+                    Spacer()
+                    TextField("Value", text: $valueToAdd)
+                        .multilineTextAlignment(.trailing)
+                        .frame(width: 140)
+                        .keyboardType(metric == .steps ? .numberPad : .decimalPad)
+                }
+
             }
-            
             .navigationTitle(metric.title)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add Data") {
-                        // Add Data
-                        self.$isShowingAddData.wrappedValue.toggle()
+                    Button("Submit") {
+                        // Do code later
                     }
                 }
+
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {
-                        self.$isShowingAddData.wrappedValue.toggle()
+                        isShowingAddData = false
                     }
                 }
             }
-            
         }
-        
     }
 }
 
 #Preview {
     NavigationStack {
-        HealthDataListView(metric: .steps)
+        HealthDataListView(metric: .weight)
     }
 }
-
-
-
-
-
-
-
