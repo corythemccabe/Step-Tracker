@@ -10,7 +10,7 @@ import SwiftUI
 enum HealthMetricContext: CaseIterable, Identifiable {
     case steps, weight
     var id: Self { self }
-
+ 
     var title: String {
         switch self {
         case .steps:
@@ -26,13 +26,14 @@ struct DashboardView: View {
     
     @State private var selectedStat: HealthMetricContext = .steps
     var isSteps: Bool { selectedStat == .steps }
-
+    
     var body: some View {
-        ZStack {
-            Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
+        NavigationStack {
+            ZStack {
+                Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
                     .resizable()
                     .edgesIgnoringSafeArea(.all)
-            NavigationStack {
+                
                 ScrollView {
                     VStack(spacing: 20) {
                         Picker("Selected Stat", selection: $selectedStat) {
@@ -41,7 +42,7 @@ struct DashboardView: View {
                             }
                         }
                         .pickerStyle(.segmented)
-
+                        
                         VStack {
                             NavigationLink(value: selectedStat) {
                                 HStack {
@@ -49,38 +50,38 @@ struct DashboardView: View {
                                         Label("Steps", systemImage: "figure.walk")
                                             .font(.title3.bold())
                                             .foregroundStyle(.pink)
-
+                                        
                                         Text("Avg: 10K Steps")
                                             .font(.caption)
                                     }
-
+                                    
                                     Spacer()
-
+                                    
                                     Image(systemName: "chevron.right")
                                 }
                             }
                             .foregroundStyle(.secondary)
                             .padding(.bottom, 12)
-
+                            
                             RoundedRectangle(cornerRadius: 12)
                                 .foregroundStyle(.secondary)
                                 .frame(height: 150)
                         }
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-
+                        
                         VStack(alignment: .leading) {
-                                VStack(alignment: .leading) {
-                                    Label("Averages", systemImage: "calendar")
-                                        .font(.title3.bold())
-                                        .foregroundStyle(.pink)
-                                    
-                                    Text("Last 28 Days")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
+                            VStack(alignment: .leading) {
+                                Label("Averages", systemImage: "calendar")
+                                    .font(.title3.bold())
+                                    .foregroundStyle(.pink)
+                                
+                                Text("Last 28 Days")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                             .padding(.bottom, 12)
-
+                            
                             RoundedRectangle(cornerRadius: 12)
                                 .foregroundStyle(.secondary)
                                 .frame(height: 240)
@@ -93,14 +94,12 @@ struct DashboardView: View {
                 .navigationTitle("Activity")
                 .navigationDestination(for: HealthMetricContext.self) { metric in
                     HealthDataListView(metric: metric)
-            }
-            
+                }
+                .tint(isSteps ? .pink : .indigo)
             }
         }
-        .tint(isSteps ? .pink : .indigo)
     }
 }
-
 #Preview {
     DashboardView()
 }
