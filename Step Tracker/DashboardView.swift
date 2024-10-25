@@ -47,9 +47,10 @@ struct DashboardView: View {
                             NavigationLink(value: selectedStat) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Label("Steps", systemImage: "figure.walk")
+                                        Label(isSteps ? "Steps Today" : "Weight Today", systemImage: isSteps ? "shoeprints.fill" : "scalemass.fill")
                                             .font(.title3.bold())
-                                            .foregroundStyle(.pink)
+                                            .foregroundStyle(isSteps ? .pink : .purple)
+                                            .padding(.top, isSteps ? 0 : 0.2)
                                         
                                         Text("Avg: 10K Steps")
                                             .font(.caption)
@@ -74,7 +75,7 @@ struct DashboardView: View {
                             VStack(alignment: .leading) {
                                 Label("Averages", systemImage: "calendar")
                                     .font(.title3.bold())
-                                    .foregroundStyle(.pink)
+                                    .foregroundStyle(isSteps ? .pink : .purple)
                                 
                                 Text("Last 28 Days")
                                     .font(.caption)
@@ -90,7 +91,9 @@ struct DashboardView: View {
                         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                     }
                 }
-                .padding()
+                .padding(.trailing)
+                .padding(.leading)
+                .padding(.top)
                 .navigationTitle("Activity")
                 .navigationDestination(for: HealthMetricContext.self) { metric in
                     HealthDataListView(metric: metric)

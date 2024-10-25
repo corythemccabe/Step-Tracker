@@ -21,12 +21,15 @@ struct HealthDataListView: View {
             Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
                 .resizable()
                 .edgesIgnoringSafeArea(.all)
-            List(0..<28) { i in
-                HStack {
-                    Text(Date(), format: .dateTime.month().day().year())
-                    Spacer()
-                    Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
-                }
+            VStack {
+                List(0..<28) { i in
+                    HStack {
+                        Text(Date(), format: .dateTime.month().day().year())
+                        Spacer()
+                        Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
+                    }
+                } 
+                .background(Color.clear) // Ensure the List has a clear background
             }
         }
         .navigationTitle(metric.title)
