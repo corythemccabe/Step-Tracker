@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
-import HealthKit
+import HealthKitUI
 
 struct HealthKitPermissionView: View {
+    
+    @Environment(HealthKitManager.self) private var hkManager
+    @Environment(\.dismiss) private var dismiss
+    @State private var isShowingPermissionAlert = false
     
     var description = """
     This app displays your step and weight data in interactive charts.
@@ -21,7 +25,7 @@ struct HealthKitPermissionView: View {
     func requestHealthKitPermission() {
         // Implementation for requesting HealthKit permissions
     }
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             Image(.appleHealth)
@@ -41,7 +45,7 @@ struct HealthKitPermissionView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
             Button("Request HealthKit Permission") {
-                requestHealthKitPermission()
+                isShowingPermissionAlert = true
                     
             }
             .buttonStyle(.borderedProminent)
@@ -50,9 +54,23 @@ struct HealthKitPermissionView: View {
         }
         .padding(50)
         .padding(.bottom, 30)
+        .healthDataAccessRequest(store: hkManager.healthStore,
+                                 shareTypes: hkManager.types,
+                                 readTypes: hkManager.types,
+                                 trigger: isShowingPermissionAlert) { result in
+            switch result {
+            case .success(_):
+                dismiss()
+            case .failure(_):
+                // handle error
+                dismiss()
+            }
+        }
     }
 }
 
+
 #Preview {
     HealthKitPermissionView()
+        .environment(HealthKitManager())
 }

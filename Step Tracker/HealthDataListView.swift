@@ -18,7 +18,7 @@ struct HealthDataListView: View {
 
     var body: some View {
         ZStack {
-            Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
+            Image(colorScheme == .dark ? .stepCounterBackgroundDark : .stepCounterBackground)
                 .resizable()
                 .edgesIgnoringSafeArea(.all)
             VStack {

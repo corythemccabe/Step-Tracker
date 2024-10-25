@@ -16,7 +16,7 @@ enum HealthMetricContext: CaseIterable, Identifiable {
         case .steps:
             return "Steps"
         case .weight:
-            return "Weight"
+            return "Heart Rate"
         }
     }
 }
@@ -30,7 +30,7 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
+                Image(colorScheme == .dark ? .stepCounterBackgroundDark : .stepCounterBackground)
                     .resizable()
                     .edgesIgnoringSafeArea(.all)
                 
@@ -47,12 +47,11 @@ struct DashboardView: View {
                             NavigationLink(value: selectedStat) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Label(isSteps ? "Steps Today" : "Weight Today", systemImage: isSteps ? "shoeprints.fill" : "scalemass.fill")
+                                        Label(isSteps ? "Steps Today" : "Heart Rate Today", systemImage: isSteps ? "shoeprints.fill" : "heart.fill")
                                             .font(.title3.bold())
-                                            .foregroundStyle(isSteps ? .pink : .purple)
-                                            .padding(.top, isSteps ? 0 : 0.2)
+                                            .foregroundStyle(isSteps ? .purple : .pink)
                                         
-                                        Text("Avg: 10K Steps")
+                                        Text(isSteps ? "Avg: 10K Steps" : "Avg: 60 BPM")
                                             .font(.caption)
                                     }
                                     
@@ -75,7 +74,7 @@ struct DashboardView: View {
                             VStack(alignment: .leading) {
                                 Label("Averages", systemImage: "calendar")
                                     .font(.title3.bold())
-                                    .foregroundStyle(isSteps ? .pink : .purple)
+                                    .foregroundStyle(isSteps ? .purple : .pink)
                                 
                                 Text("Last 28 Days")
                                     .font(.caption)
@@ -98,7 +97,7 @@ struct DashboardView: View {
                 .navigationDestination(for: HealthMetricContext.self) { metric in
                     HealthDataListView(metric: metric)
                 }
-                .tint(isSteps ? .pink : .indigo)
+                .tint(isSteps ? .purple : .indigo)
             }
         }
     }
