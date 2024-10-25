@@ -28,7 +28,8 @@ struct HealthDataListView: View {
                         Spacer()
                         Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
                     }
-                } 
+                }
+                
                 .background(Color.clear) // Ensure the List has a clear background
             }
         }
