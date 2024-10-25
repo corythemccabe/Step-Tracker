@@ -24,6 +24,8 @@ enum HealthMetricContext: CaseIterable, Identifiable {
 struct DashboardView: View {
     @Environment(\.colorScheme) var colorScheme
     
+    @AppStorage("hasSeenHealthKitPermission") private var hasSeenHealthKitPermission = false
+    @State private var isShowingHealthKitPermissionSheet =  false
     @State private var selectedStat: HealthMetricContext = .steps
     var isSteps: Bool { selectedStat == .steps }
     
@@ -93,15 +95,24 @@ struct DashboardView: View {
                 .padding(.trailing)
                 .padding(.leading)
                 .padding(.top)
+                .onAppear() {
+                    isShowingHealthKitPermissionSheet = !hasSeenHealthKitPermission
+                }
                 .navigationTitle("Activity")
                 .navigationDestination(for: HealthMetricContext.self) { metric in
                     HealthDataListView(metric: metric)
                 }
-                .tint(isSteps ? .purple : .indigo)
+                .sheet(isPresented: $isShowingHealthKitPermissionSheet, onDismiss: {
+                    // Fetch HelthKit Data
+                },content: {
+                    HealthKitPermissionView(hasSeen: $hasSeenHealthKitPermission)
+                })
             }
         }
+        .tint(isSteps ? .purple : .pink)
     }
 }
+
 #Preview {
     DashboardView()
 }
