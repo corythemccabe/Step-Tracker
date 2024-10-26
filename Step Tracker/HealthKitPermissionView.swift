@@ -28,36 +28,30 @@ struct HealthKitPermissionView: View {
     }
         
     var body: some View {
-        VStack(alignment: .leading) {
-            Image(.appleHealth)
-                .resizable()
-                .frame(width: 100, height: 100)
-                .cornerRadius(10)
-                .shadow(color: .gray.opacity(0.3), radius: 16)
-                .onTapGesture {
-//                    requestHealthKitPermission()
-                }
-                .padding(.bottom, 20)
-                
-            Text("Apple Health Integration")
-                .font(.title2).bold().padding(.bottom, 10)
-                
-            Text("\(description)")
-                .font(.body)
-                .foregroundStyle(.secondary)
-            Button("Request HealthKit Permission") {
+        VStack(spacing: 130) {
+            VStack(alignment: .leading, spacing: 10) {
+                Image(.appleHealth)
+                    .resizable()
+                    .frame(width: 90, height: 90)
+                    .shadow(color: .gray.opacity(0.3), radius: 16)
+                    .padding(.bottom, 12)
+
+                Text("Apple Health Integration")
+                    .font(.title2).bold()
+
+                Text(description)
+                    .foregroundStyle(.secondary)
+            }
+
+            Button("Request Apple Health Permission") {
                 isShowingPermissionAlert = true
-                    
             }
             .buttonStyle(.borderedProminent)
             .tint(.pink)
-            
         }
-        .padding(50)
-        .onAppear {
-            isShowingPermissionAlert = !hasSeenPermissionAlert
-        }
-        .padding(.bottom, 30)
+        .padding(30)
+        .interactiveDismissDisabled()
+        .onAppear { hasSeenPermissionAlert = true }
         .healthDataAccessRequest(store: hkManager.healthStore,
                                  shareTypes: hkManager.types,
                                  readTypes: hkManager.types,
@@ -66,13 +60,12 @@ struct HealthKitPermissionView: View {
             case .success(_):
                 dismiss()
             case .failure(_):
-                // handle error
+                // handle the error later
                 dismiss()
             }
         }
     }
 }
-
 
 #Preview {
     HealthKitPermissionView(hasSeenPermissionAlert: .constant(true))
