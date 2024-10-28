@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HealthKitUI
 
 struct HealthDataListView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -18,7 +19,7 @@ struct HealthDataListView: View {
 
     var body: some View {
         ZStack {
-            Image(colorScheme == .dark ? "Step Counter Background Dark" : "Step Counter Background")
+            Image(colorScheme == .dark ? .stepCounterBackgroundDark : .stepCounterBackground)
                 .resizable()
                 .edgesIgnoringSafeArea(.all)
             VStack {
@@ -29,8 +30,6 @@ struct HealthDataListView: View {
                         Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
                     }
                 }
-                
-                .background(Color.clear) // Ensure the List has a clear background
             }
         }
         .navigationTitle(metric.title)
@@ -46,7 +45,6 @@ struct HealthDataListView: View {
 
     var addDataView: some View {
         NavigationStack {
-
                 Form {
                     DatePicker("Date", selection: $addDataDate, displayedComponents: .date)
                     HStack {
@@ -57,7 +55,6 @@ struct HealthDataListView: View {
                             .frame(width: 140)
                             .keyboardType(metric == .steps ? .numberPad : .decimalPad)
                     }
-
                 }
             .navigationTitle(metric.title)
             .toolbar {
