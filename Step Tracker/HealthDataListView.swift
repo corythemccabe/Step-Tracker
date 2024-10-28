@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HealthKitUI
 
 struct HealthDataListView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -26,9 +27,8 @@ struct HealthDataListView: View {
                     HStack {
                         Text(Date(), format: .dateTime.month().day().year())
                         Spacer()
-                        Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))
-                    }
-                } 
+                        Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 1)))                    }
+                }
                 .background(Color.clear) // Ensure the List has a clear background
             }
         }
