@@ -87,7 +87,8 @@ struct DashboardView: View {
                 }
             }
             .padding()
-            .onAppear {
+            .task {
+                await HealthKitManager().fetchStepCount()
                 isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
             }
             .navigationTitle("Dashboard")
@@ -108,3 +109,7 @@ struct DashboardView: View {
     DashboardView()
         .environment(HealthKitManager())
 }
+
+
+
+
