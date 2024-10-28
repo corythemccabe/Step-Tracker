@@ -45,7 +45,6 @@ struct HealthDataListView: View {
 
     var addDataView: some View {
         NavigationStack {
-
                 Form {
                     DatePicker("Date", selection: $addDataDate, displayedComponents: .date)
                     HStack {
@@ -56,7 +55,6 @@ struct HealthDataListView: View {
                             .frame(width: 140)
                             .keyboardType(metric == .steps ? .numberPad : .decimalPad)
                     }
-
                 }
             .navigationTitle(metric.title)
             .toolbar {
